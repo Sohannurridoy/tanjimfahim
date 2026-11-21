@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TANJIM AL FAHIM | CYBER PANEL</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#020604;color:#00ff75;
+ font-family:monospace;min-height:100vh;
+ overflow:hidden;
+}
+canvas{position:fixed;inset:0;z-index:-1}
+
+/* INTRO */
+#intro{
+ position:fixed;inset:0;background:#000;
+ display:flex;align-items:center;
+ justify-content:center;z-index:10;
+ padding:20px;
+}
+.boot{text-align:center;width:100%;max-width:400px}
+.logo{
+ font-size:25px;font-weight:bold;
+ text-shadow:0 0 15px #00ff75;
+ letter-spacing:3px;
+}
+.terminal{
+ text-align:left;margin-top:35px;
+ font-size:13px;line-height:2;
+ color:#00ff75;min-height:160px;
+}
+.bar{
+ height:5px;background:#123;
+ margin-top:20px;border-radius:10px;
+ overflow:hidden;
+}
+.progress{
+ height:100%;width:0%;
+ background:#00ff75;
+ box-shadow:0 0 15px #00ff75;
+ transition:width .2s;
+}
+#percent{margin-top:12px}
+
+/* DASHBOARD */
+#main{
+ display:none;max-width:430px;
+ margin:auto;padding:25px 20px;
+ height:100vh;overflow:auto;
+}
+.header{text-align:center;margin-bottom:30px}
+h1{
+ font-size:23px;
+ text-shadow:0 0 15px #00ff75;
+}
+.small{font-size:11px;color:#58a77b}
+.option{
+ border:1px solid #00ff75;
+ padding:22px;margin:18px 0;
+ border-radius:12px;
+ background:#00130b;
+ box-shadow:0 0 12px #00ff7520;
+ cursor:pointer;transition:.3s;
+}
+.option:hover{
+ transform:scale(1.03);
+ background:#00321a;
+ box-shadow:0 0 20px #00ff75;
+}
+.option h3{margin:0 0 12px}
+button{
+ background:transparent;
+ color:#00ff75;
+ border:1px solid #00ff75;
+ padding:10px 15px;
+ font-family:monospace;
+ cursor:pointer;
+}
+button:hover{background:#00ff75;color:black}
+#content{
+ display:none;padding:18px;
+ border:1px solid #00ff75;
+ border-radius:10px;
+ margin-top:20px;
+}
+.footer{
+ text-align:center;font-size:10px;
+ margin-top:35px;color:#458a62;
+}
+</style>
+</head>
+
+<body>
+<canvas id="matrix"></canvas>
+
+<!-- BOOT ANIMATION -->
+<div id="intro">
+ <div class="boot">
+  <div class="logo">TANJIM AL FAHIM</div>
+  <p class="small">CYBER ACCESS TERMINAL</p>
+
+  <div class="terminal" id="terminal"></div>
+
+  <div class="bar">
+   <div class="progress" id="progress"></div>
+  </div>
+  <div id="percent">0%</div>
+  <p class="small">PLEASE WAIT • INITIALIZING</p>
+ </div>
+</div>
+
+<!-- MAIN DASHBOARD -->
+<div id="main">
+
+ <div class="header">
+  <h1>⌘ TANJIM AL FAHIM</h1>
+  <p class="small">REMOTE DEVICE MONITORING PANEL</p>
+  <p class="small">● SYSTEM INTERFACE ONLINE</p>
+ </div>
+
+ <div class="option" onclick="openPage('live')">
+  <h3> LIVE PHONE SCREEN</h3>
+  <p class="small">লাইভ ফোন চালানো দেখুন</p>
+  <button>ACCESS SCREEN →</button>
+ </div>
+
+ <div class="option" onclick="openPage('history')">
+  <h3>⌛ PHONE ACTIVITY HISTORY</h3>
+  <p class="small">ফোন চালানোর History</p>
+  <button>VIEW HISTORY →</button>
+ </div>
+
+ <div id="content"></div>
+
+ <div class="footer">
+  TANJIM AL FAHIM<br><br>
+  CYBER SECURITY INTERFACE<br>
+  ALL RIGHTS RESERVED
+ </div>
+</div>
+
+<script>
+// BOOT ANIMATION
+const lines=[
+ "> INITIALIZING SYSTEM...",
+ "> LOADING CYBER INTERFACE...",
+ "> SCANNING DEVICE...",
+ "> CHECKING CONNECTION...",
+ "> ESTABLISHING SECURE SESSION...",
+ "> ACCESS INTERFACE READY..."
+];
+
+let i=0;
+let terminal=document.getElementById("terminal");
+let progress=document.getElementById("progress");
+let percent=document.getElementById("percent");
+
+let timer=setInterval(()=>{
+ if(i<lines.length){
+  terminal.innerHTML+=lines[i]+"<br>";
+  i++;
+  let p=Math.round(i/lines.length*100);
+  progress.style.width=p+"%";
+  percent.innerText=p+"%";
+ }else{
+  clearInterval(timer);
+  setTimeout(()=>{
+   document.getElementById("intro").style.display="none";
+   document.getElementById("main").style.display="block";
+  },700);
+ }
+},650);
+
+// DASHBOARD
+function openPage(type){
+ let box=document.getElementById("content");
+ box.style.display="block";
+
+ if(type==="live"){
+  box.innerHTML=`
+  <h3> LIVE SCREEN</h3>
+  <p>● DEMO INTERFACE ACTIVE</p>
+  <p>Real-time screen viewing requires
+  the device owner's permission and
+  an authorized connection.</p>
+  <p class="small">TANJIM AL FAHIM</p>`;
+ }else{
+  box.innerHTML=`
+  <h3>⌛ ACTIVITY HISTORY</h3>
+  <p>NO HISTORY DATA AVAILABLE</p>
+  <p>Authorized device activity will
+  appear here when connected.</p>
+  <p class="small">TANJIM AL FAHIM</p>`;
+ }
+}
+ 
+// MATRIX EFFECT
+const c=document.getElementById("matrix");
+const ctx=c.getContext("2d");
+function resize(){
+ c.width=innerWidth;
+ c.height=innerHeight;
+}
+resize();
+window.addEventListener("resize",resize);
+let drops=Array(Math.floor(innerWidth/16)).fill(1);
+
+function draw(){
+ ctx.fillStyle="rgba(0,0,0,.09)";
+ ctx.fillRect(0,0,c.width,c.height);
+ ctx.fillStyle="#00ff75";
+ ctx.font="15px monospace";
+ drops.forEach((y,x)=>{
+  ctx.fillText(
+   Math.random()>.5?"1":"0",x*16,y*16
+  );
+  if(y*16>c.height&&Math.random()>.975)
+   drops[x]=0;
+  drops[x]++;
+ });
+}
+setInterval(draw,45);
+</script>
+</body>
+</html>
